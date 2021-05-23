@@ -6,9 +6,8 @@ export default {
             areas: payload.areas,
             description: payload.desc,
             hourlyRate: payload.rate,
-            id:"c3"
+            id: context.rootGetters.userId
         };
-
-        context.commit("registerCoach",coach)
+        context.commit("registerCoach", coach)
     }
 }
