@@ -33,6 +33,8 @@ export default {
 
         if (!response.ok) {
             //eror
+            const error = new Error(responseData.message || "failed to fetch")
+            throw error;
         }
 
         const coaches = [];
@@ -48,6 +50,6 @@ export default {
             }
             coaches.push(coach)
         }
-        context.commit("setCoaches",coaches)
+        context.commit("setCoaches", coaches)
     }
 }
