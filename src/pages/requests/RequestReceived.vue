@@ -1,5 +1,6 @@
 <template>
-  <base-dialog :v-show="!!error" title="Error occured!" @close="handleError">
+ <div>
+    <base-dialog :v-show="!!error" title="Error occured!" @close="handleError">
     <p>{{ error }}></p>
   </base-dialog>
   <section>
@@ -19,6 +20,7 @@
       <h3 v-else>You havent received any requests yet!</h3>
     </base-card>
   </section>
+ </div>
 </template>
 
 <script>
