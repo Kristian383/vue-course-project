@@ -38,8 +38,15 @@ export default {
       ) {
         this.formIsValid = false;
         return;
-
-        // send http request
+      }
+      // send http request
+      if (this.mode === 'login') {
+        // ...
+      } else {
+        this.$store.dispatch('signUp', {
+          email:this.email,
+          password:this.password
+        });
       }
     },
     switchAuthMode() {
