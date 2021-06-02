@@ -1,40 +1,47 @@
 <template>
   <div>
     <base-dialog :show="!!error" title="Error occured!" @close="handleError">
-    <p>{{ error }}></p>
-  </base-dialog>
-  <section>
-    <coach-filter @change-filter="setFilters"></coach-filter>
-  </section>
+      <p>{{ error }}></p>
+    </base-dialog>
+    <section>
+      <coach-filter @change-filter="setFilters"></coach-filter>
+    </section>
 
-  <section>
-    <base-card>
-      <div class="controls">
-        <base-button mode="outline" @click="loadCoaches(true)">Refresh</base-button>
-
-        <base-button v-if="!isCoach && !isLoading" link to="/register"
-          >Register as coach</base-button
-        >
-      </div>
-      <div v-if="isLoading">
-        <base-spinner></base-spinner>
-      </div>
-      <ul v-else-if="hasCoaches">
-        <coach-item
-          v-for="coach in filteredCoaches"
-          :key="coach.id"
-          :firstName="coach.firstName"
-          :lastName="coach.lastName"
-          :rate="coach.hourlyRate"
-          :areas="coach.areas"
-          :id="coach.id"
-        >
-          {{ coach.firstName }}
-        </coach-item>
-      </ul>
-      <h3 v-else>No coaches found</h3>
-    </base-card>
-  </section>
+    <section>
+      <base-card>
+        <div class="controls">
+          <base-button mode="outline" @click="loadCoaches(true)"
+            >Refresh</base-button
+          >
+          <base-button link to="/auth?redirect=register" v-if="!isLoggedIn"
+            >Log in to register as a coach</base-button
+          >
+          <base-button
+            v-if="!isCoach && !isLoading && isLoggedIn"
+            link
+            to="/register"
+            >Register as coach</base-button
+          >
+        </div>
+        <div v-if="isLoading">
+          <base-spinner></base-spinner>
+        </div>
+        <ul v-else-if="hasCoaches">
+          <coach-item
+            v-for="coach in filteredCoaches"
+            :key="coach.id"
+            :firstName="coach.firstName"
+            :lastName="coach.lastName"
+            :rate="coach.hourlyRate"
+            :areas="coach.areas"
+            :id="coach.id"
+          >
+            {{ coach.firstName }}
+          </coach-item>
+        </ul>
+        <h3 v-else>No coaches found</h3>
+      </base-card>
+    </section>
   </div>
 </template>
 
@@ -68,23 +75,28 @@ export default {
     isCoach() {
       return this.$store.getters['coaches/isCoach'];
     },
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
   },
   methods: {
     setFilters(updatedFilters) {
       this.activeFilters = updatedFilters;
     },
-    async loadCoaches(refresh=false) {
+    async loadCoaches(refresh = false) {
       this.isLoading = true;
       try {
-        await this.$store.dispatch('coaches/loadCoaches',{forceRefresh:refresh});
+        await this.$store.dispatch('coaches/loadCoaches', {
+          forceRefresh: refresh,
+        });
       } catch (error) {
         this.error = error.message || 'Something went wrong';
       }
       this.isLoading = false;
     },
-    handleError(){
-      this.error=null;
-    }
+    handleError() {
+      this.error = null;
+    },
   },
   data() {
     return {

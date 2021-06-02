@@ -9,7 +9,9 @@ export default {
             hourlyRate: payload.rate,
         };
 
-        const response = await fetch(`https://vue-http-project-496c1-default-rtdb.firebaseio.com/coaches/${userId}.json`, {
+        const token = context.rootGetters.token;
+
+        const response = await fetch(`https://vue-http-project-496c1-default-rtdb.firebaseio.com/coaches/${userId}.json?auth=${token}`, {
             method: "PUT",
             body: JSON.stringify(coach) //converting object to json format
         });
@@ -26,10 +28,10 @@ export default {
             id: userId
         })
     },
-    async loadCoaches(context,payload) {
+    async loadCoaches(context, payload) {
 
-        if(!payload.forceRefresh && !context.getters.shouldUpdate){
-            return ;
+        if (!payload.forceRefresh && !context.getters.shouldUpdate) {
+            return;
         }
 
         const response = await fetch(`https://vue-http-project-496c1-default-rtdb.firebaseio.com/coaches.json`);
@@ -39,7 +41,7 @@ export default {
         if (!response.ok) {
             //eror
             const error = new Error(responseData.message || "failed to fetch");
-            
+
             console.log("Usao");
             throw error;
         }
@@ -59,6 +61,6 @@ export default {
         }
         context.commit("setCoaches", coaches);
         context.commit("setFetchTimestamp");
-        
+
     }
 }
