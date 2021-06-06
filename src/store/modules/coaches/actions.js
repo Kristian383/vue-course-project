@@ -42,7 +42,6 @@ export default {
             //eror
             const error = new Error(responseData.message || "failed to fetch");
 
-            console.log("Usao");
             throw error;
         }
 

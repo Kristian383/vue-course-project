@@ -13,13 +13,15 @@ export default {
 
         const responseData = await response.json();
 
+
+        if (!response.ok) {
+            const error = new Error(responseData.message || "failed to send request")
+            throw error;
+        }
+
         newRequest.id = responseData.name;
         newRequest.coachId = payload.coachId;
 
-        if (!response.ok) {
-            const error = new Error(responseData.message || "failed to fetch")
-            throw error;
-        }
         context.commit("addRequest", newRequest);
     },
     async fetchRequests(context) {
@@ -31,7 +33,7 @@ export default {
         const responseData = await response.json();
 
         if (!response.ok) {
-            const error = new Error(responseData.message || "failed to fetch")
+            const error = new Error(responseData.message || "failed to fetch request")
             throw error;
         }
 
